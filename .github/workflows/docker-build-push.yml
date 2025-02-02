@@ -31,15 +31,14 @@ jobs:
       # Step 4: Build Docker image
       - name: Build Docker image
         run: |
-          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}-$(basename $GITHUB_REPOSITORY):latest"
-          IMAGE_NAME_LOWER=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')
-          docker build -t $IMAGE_NAME_LOWER .
-          docker tag $IMAGE_NAME_LOWER ghcr.io/${{ github.repository_owner | lower }}/$(basename $GITHUB_REPOSITORY):${{ github.sha }}
+          # Create image name with lowercase owner
+          IMAGE_NAME="ghcr.io/$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')/$(basename $GITHUB_REPOSITORY):latest"
+          docker build -t $IMAGE_NAME .
+          docker tag $IMAGE_NAME ghcr.io/$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')/$(basename $GITHUB_REPOSITORY):${{ github.sha }}
 
       # Step 5: Push Docker image to GHCR
       - name: Push Docker image to GHCR
         run: |
-          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}-$(basename $GITHUB_REPOSITORY)"
-          IMAGE_NAME_LOWER=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')
-          docker push $IMAGE_NAME_LOWER:latest
-          docker push $IMAGE_NAME_LOWER:${{ github.sha }}
+          IMAGE_NAME="ghcr.io/$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')/$(basename $GITHUB_REPOSITORY)"
+          docker push $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:${{ github.sha }}
