@@ -1,7 +1,8 @@
 /* eslint-disable perfectionist/sort-objects */
 const joi = require('joi');
 const { readFileSync } = require('node:fs');
-const { set, replace } = require('radash');
+const { set } = require('radash');
+const setValue = require('set-value');
 
 const VAR_FILE_SUFFIX = '__FILE';
 
@@ -13,6 +14,7 @@ const VAR_FILE_SUFFIX = '__FILE';
  */
 function get(property, environment = process.env) {
   const object = {};
+  const object2 = {};
   const environmentVariablePattern = property.replaceAll('.', '_').toUpperCase();
   const matchingEnvironmentVariables = Object.keys(environment).filter((environmentKey) => environmentKey.startsWith(environmentVariablePattern));
 
@@ -21,8 +23,11 @@ function get(property, environment = process.env) {
     const matchingPropertyPath = matchingEnvironmentVariable.replaceAll('_', '.').toLowerCase();
     const matchingPropertyPathWithoutPrefix = matchingPropertyPath.replace(`${property}.`, '');
     set(object, matchingPropertyPathWithoutPrefix, environmentVariableValue);
+    setValue(object2, matchingPropertyPathWithoutPrefix, environmentVariableValue);
   }
 
+  console.log({ object });
+  console.log({ object2 });
   return object;
 }
 
