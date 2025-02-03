@@ -1,5 +1,5 @@
 # Common Stage
-FROM oven/bun:1-slim as base
+FROM oven/bun:1-slim AS base
 WORKDIR /usr/src/app
 
 LABEL maintainer="enk0ded"
@@ -19,7 +19,7 @@ RUN apt update \
     && rm -rf /var/cache/apt/*
 
 # Dependencies stage
-FROM base as dependencies
+FROM base AS dependencies
 
 # Copy app package.json
 COPY packages/app/package.json bun.lock ./
@@ -28,7 +28,7 @@ COPY packages/app/package.json bun.lock ./
 RUN bun install --frozen-lockfile --production
 
 # Release stage
-FROM base as release
+FROM base AS release
 
 ## Copy node_modules
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
