@@ -1,7 +1,7 @@
 # Common Stage
 FROM node:23-slim as base
 
-LABEL maintainer="fmartinou"
+LABEL maintainer="enk0ded"
 EXPOSE 3000
 
 ARG WUD_VERSION=unknown
@@ -25,10 +25,10 @@ RUN apt update \
 FROM base as dependencies
 
 # Copy app package.json
-COPY app/package* ./
+COPY packages/app/package* ./
 
 # Install dependencies
-RUN npm ci --omit=dev --omit=optional --no-audit --no-fund --no-update-notifier
+RUN bun install --omit=dev --omit=optional
 
 # Release stage
 FROM base as release
@@ -43,7 +43,7 @@ CMD ["node", "index"]
 COPY --from=dependencies /home/node/app/node_modules ./node_modules
 
 # Copy app
-COPY app/ ./
+COPY packages/app/ ./
 
 # Copy ui
-COPY ui/dist/ ./ui
+COPY packages/ui/dist/ ./ui
