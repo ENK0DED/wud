@@ -1,7 +1,7 @@
 /* eslint-disable perfectionist/sort-objects */
-import joi from 'joi';
-import { readFileSync } from 'node:fs';
-import { set } from 'radash';
+const joi = require('joi');
+const { readFileSync } = require('node:fs');
+const { set, replace } = require('radash');
 
 const VAR_FILE_SUFFIX = '__FILE';
 
@@ -11,7 +11,7 @@ const VAR_FILE_SUFFIX = '__FILE';
  * @param {Record<string, string>} environment
  * @returns Record<string, any>
  */
-export function get(property, environment = process.env) {
+function get(property, environment = process.env) {
   const object = {};
   const environmentVariablePattern = property.replaceAll('.', '_').toUpperCase();
   const matchingEnvironmentVariables = Object.keys(environment).filter((environmentKey) => environmentKey.startsWith(environmentVariablePattern));
@@ -30,7 +30,7 @@ export function get(property, environment = process.env) {
  * Lookup external secrets defined in files.
  * @param wudEnvVars
  */
-export function replaceSecrets(wudEnvironmentVariables) {
+function replaceSecrets(wudEnvironmentVariables) {
   const secretFileEnvironmentVariables = Object.keys(wudEnvironmentVariables).filter((wudEnvironmentVariable) =>
     wudEnvironmentVariable.toUpperCase().endsWith(VAR_FILE_SUFFIX),
   );
@@ -47,7 +47,7 @@ export function replaceSecrets(wudEnvironmentVariables) {
 // 1. Get a copy of all wud related env vars
 /** @type {Partial<Record<string, string>>} */
 // eslint-disable-next-line unicorn/prevent-abbreviations
-export const wudEnvVars = {};
+const wudEnvVars = {};
 
 for (const wudEnvironmentVariable of Object.keys(process.env).filter((environmentVariable) => environmentVariable.toUpperCase().startsWith('WUD'))) {
   wudEnvVars[wudEnvironmentVariable] = process.env[wudEnvironmentVariable];
@@ -57,18 +57,18 @@ for (const wudEnvironmentVariable of Object.keys(process.env).filter((environmen
 replaceSecrets(wudEnvVars);
 
 /** @type {() => string} */
-export const getVersion = () => wudEnvVars.WUD_VERSION ?? 'unknown';
-export const getLogLevel = () => wudEnvVars.WUD_LOG_LEVEL ?? 'info';
-export const getWatcherConfigurations = () => get('wud.watcher', wudEnvVars);
-export const getTriggerConfigurations = () => get('wud.trigger', wudEnvVars);
-export const getRegistryConfigurations = () => get('wud.registry', wudEnvVars);
-export const getAuthenticationConfigurations = () => get('wud.auth', wudEnvVars);
-export const getStoreConfiguration = () => get('wud.store', wudEnvVars);
+const getVersion = () => wudEnvVars.WUD_VERSION ?? 'unknown';
+const getLogLevel = () => wudEnvVars.WUD_LOG_LEVEL ?? 'info';
+const getWatcherConfigurations = () => get('wud.watcher', wudEnvVars);
+const getTriggerConfigurations = () => get('wud.trigger', wudEnvVars);
+const getRegistryConfigurations = () => get('wud.registry', wudEnvVars);
+const getAuthenticationConfigurations = () => get('wud.auth', wudEnvVars);
+const getStoreConfiguration = () => get('wud.store', wudEnvVars);
 
 /**
  * Get Server configurations.
  */
-export function getServerConfiguration() {
+function getServerConfiguration() {
   const configurationFromEnvironment = get('wud.server', wudEnvVars);
   const configurationSchema = joi.object().keys({
     enabled: joi.boolean().default(true),
@@ -101,4 +101,19 @@ export function getServerConfiguration() {
   return configurationToValidate.value;
 }
 
-export const getPublicUrl = (request) => wudEnvVars.WUD_PUBLIC_URL ?? `${request.protocol}://${request.hostname}`;
+const getPublicUrl = (request) => wudEnvVars.WUD_PUBLIC_URL ?? `${request.protocol}://${request.hostname}`;
+
+module.exports = {
+  get,
+  getAuthenticationConfigurations,
+  getLogLevel,
+  getPublicUrl,
+  getRegistryConfigurations,
+  getServerConfiguration,
+  getStoreConfiguration,
+  getTriggerConfigurations,
+  getVersion,
+  getWatcherConfigurations,
+  replaceSecrets,
+  wudEnvVars,
+};

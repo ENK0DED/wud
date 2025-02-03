@@ -1,5 +1,4 @@
-import { pino } from 'pino';
+const pino = require('pino');
+const { getLogLevel } = require('../configuration/index.js');
 
-import { getLogLevel } from '../configuration/index.js';
-
-export default pino({ level: getLogLevel(), name: 'whats-up-docker' });
+module.exports = pino({ level: getLogLevel(), name: 'whats-up-docker' });

@@ -1,9 +1,9 @@
-import api from './api/index.js';
-import { getVersion } from './configuration/index.js';
-import log from './log/index.js';
-import prometheus from './prometheus/index.js';
-import registry from './registry/index.js';
-import store from './store/index.js';
+const api = require('./api/index.js');
+const { getVersion } = require('./configuration/index.js');
+const log = require('./log/index.js');
+const prometheus = require('./prometheus/index.js');
+const registry = require('./registry/index.js');
+const store = require('./store/index.js');
 
 async function main() {
   log.info(`WUD is starting (version = ${getVersion()})`);
