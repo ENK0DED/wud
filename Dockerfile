@@ -13,11 +13,6 @@ HEALTHCHECK --interval=30s --timeout=5s CMD if [[ -z ${WUD_SERVER_ENABLED} || ${
 
 RUN mkdir /store
 
-# Add useful stuff
-RUN apt update \
-    && apt install -y tzdata openssl curl git jq \
-    && rm -rf /var/cache/apt/*
-
 # Dependencies stage
 FROM base AS dependencies
 
