@@ -25,7 +25,7 @@ FROM base AS dependencies
 COPY packages/app/package.json bun.lock ./
 
 # Install dependencies
-RUN bun install --production
+RUN bun install --omit=dev --omit=peer --omit=optional
 
 # Release stage
 FROM base AS release
