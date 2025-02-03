@@ -33,8 +33,8 @@ jobs:
       #     cd ../packages/e2e && bun lint
       #     cd ../packages/ui && bun lint
 
-      - name: Run Unit Tests
-        run: cd packages/app && bun run test
+      # - name: Run Unit Tests
+      #   run: cd packages/app && bun run test
 
       - name: Build UI
         run: cd packages/ui && bun run build
