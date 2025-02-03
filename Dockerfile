@@ -25,7 +25,7 @@ FROM base AS dependencies
 COPY packages/app/package.json bun.lock ./
 
 # Install dependencies
-RUN bun install --frozen-lockfile --production
+RUN bun install --production
 
 # Release stage
 FROM base AS release
