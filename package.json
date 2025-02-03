@@ -7,8 +7,6 @@
   ],
   "devDependencies": {
     "@types/bun": "^1.2.2",
-    "babel-jest": "^29.7.0",
-    "babel-plugin-rewire": "^1.2.0",
     "eslint-config-enk0ded": "^1.1.0",
     "eslint": "^9.19.0",
     "jest": "^29.7.0",
