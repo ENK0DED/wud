@@ -2,12 +2,15 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "allowImportingTsExtensions": true,
+    "allowJs": true,
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
     "lib": ["ESNext", "DOM"],
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleDetection": "force",
+    "moduleResolution": "bundler",
     "newLine": "lf",
     "noEmit": true,
     "noEmitOnError": true,
@@ -22,6 +25,6 @@
     "strict": true,
     "stripInternal": true,
     "target": "ESNext",
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": true
   }
 }
